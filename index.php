@@ -30,10 +30,11 @@ else if(isset($_POST["email"]) && isset($_POST["pass"])){
 	<title>Login</title>
 </head>
 <body>
+	<h2>Login</h2>
 	<form method="POST">
-		<input type="email" name="email">
-		<input type="password" name="pass" >
-		<input type="submit" value="Login">
+		<input type="email" name="email"><br>
+		<input type="password" name="pass" ><br>
+		<input type="submit" value="Login"><br>
 	</form>
 </body>
 </html>

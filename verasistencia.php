@@ -10,7 +10,8 @@ $idmateria = $_GET["materia"];
 $idhorario = $_GET["horario"];
 
 $materia = "SELECT * FROM materias WHERE idmateria = $idmateria";
-$materia = mysqli_fetch_array(mysqli_query($link, $materia));
+$materia = mysqli_query($link, $materia);
+$materia = mysqli_fetch_array($materia);
 
 $horarios = "SELECT * FROM horarios WHERE idmateria = $idmateria";
 $horarios = mysqli_query($link, $horarios);
@@ -20,6 +21,8 @@ $alumnos = mysqli_query($link, $alumnos);
 
 $query = "SELECT * FROM asistencias WHERE idmateria = $idmateria AND idhorario = $idhorario AND fecha = '$fechahoy'";
 $query = mysqli_query($link, $query);
+
+if(mysqli_num_rows($query) > 0) header('Location: verasistencia.php');
 
 if(isset($_POST["presentes"])) {
 	$fecha = $_POST["fecha"];
@@ -31,7 +34,7 @@ if(isset($_POST["presentes"])) {
 		$observacion = $_POST["observaciones"][$key];
 		$query = "INSERT INTO asistencias (idalumno, idmateria, idhorario, fecha, estado, observaciones) VALUES ($idalumno, $idmateria, $idhorario,'$fecha', '$estado', '$observacion')";	
 		$consulta = mysqli_query($link, $query);
-		//if($consulta) echo "<script>console.log(`$query`);</script>";
+		if($consulta) echo "<script>console.log(`$query`);</script>";
 	}
 }
 
@@ -58,8 +61,7 @@ if(isset($_POST["presentes"])) {
 		value="<?php echo $fechahoy; ?>">
 		<select name="horario" value=<?php echo $_GET["horario"] ?>>
 			<?php
-				while($r = mysqli_fetch_array($horarios)) 
-					echo "<option value=$r[0]>$r[2] - $r[3]</option>";
+				while($r = mysqli_fetch_array($horarios)) echo "<option value=$r[0]>$r[2] - $r[3]</option>";
 			?>
 		</select>
 		<table border="1" style="margin-top: 10px;">
@@ -69,16 +71,17 @@ if(isset($_POST["presentes"])) {
 				<th>Observaciones</th>
 			</tr>
 			<?php
-
-				while($r = mysqli_fetch_array($alumnos))
+				while($r = mysqli_fetch_array($query))
+					$alumno = "SELECT * FROM alumnos WHERE idalumno = $r[1]";
+					$alumno = mysqli_fetch_array(mysqli_query($link, $alumno));
 					echo "<tr>
 							<td style='background: red' onclick='cambiarPresente(this);'>
 								<input type=hidden name=presentes[] value='a'>
 								<label>Ausente</label>
 							</td> 
 							<td>
-								$r[2]
-								<input type='hidden' value=$r[0] name=alumnos[]>
+								$alumno[2]
+								<input type='hidden' value=$alumno[0] name=alumnos[]>
 							</td>
 							<td>
 								<input type='text' placeholder='Observaciones...' name='observaciones[]' value=' '>
@@ -90,7 +93,7 @@ if(isset($_POST["presentes"])) {
 	</form>
 
 	<script>
-		//window.onload = comprobarPresentes();
+		window.onload = comprobarPresentes();
 
 		function comprobarPresentes(){
 			let inputs = document.querySelectorAll('input[name="presentes[]"]');
@@ -122,6 +125,7 @@ if(isset($_POST["presentes"])) {
 				input.value = "a";
 				label.innerText = "Ausente";
 			}
+			console.log(checkbox.checked);		
 		}
 	</script>
 </body>

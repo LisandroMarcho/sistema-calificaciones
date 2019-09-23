@@ -2,11 +2,12 @@
 session_start();
 include_once("conx.php");
 
-if(isset($_SESSION["idprofesor"])){
-	$idprofesor = $_SESSION["idprofesor"];
-	$idmaterias = "SELECT idmateria FROM materiasprofesores WHERE idprofesor = $idprofesor";
-	$idmaterias = mysqli_query($link, $idmaterias);
-}
+verifySession();
+
+$idprofesor = $_SESSION["idprofesor"];
+
+$idmaterias = "SELECT idmateria FROM materiasprofesores WHERE idprofesor = $idprofesor";
+$idmaterias = mysqli_query($link, $idmaterias);
 
 ?>
 
@@ -32,7 +33,7 @@ if(isset($_SESSION["idprofesor"])){
 			$escuela = mysqli_query($link, $escuela);
 			$escuela = mysqli_fetch_array($escuela);
 
-			echo "<li>$materia[2] - $curso[2]° $curso[3]ª $curso[4] - $escuela[1]</li>";
+			echo "<li><a href='vercurso.php?idcurso=$curso[0]&idmateria=$materia[0]'>$materia[2] - $curso[2]° $curso[3]ª $curso[4]</a> - $escuela[1]</li>";
 		}
 	?>
 	</ul>

@@ -9,4 +9,11 @@ if($link = mysqli_connect($host, $user, $pass, $db))
 else http_response_code(500);
 
 date_default_timezone_set("America/Argentina/Buenos_Aires");
+
+function verifySession(){
+	if(!isset($_SESSION["idprofesor"])) header('Location: index.php');
+}
+
+
+
 ?>
