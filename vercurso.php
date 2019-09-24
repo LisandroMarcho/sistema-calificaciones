@@ -4,14 +4,13 @@ include_once("conx.php");
 
 verifySession();
 
-if(!isset($_GET["idcurso"]) || !isset($_GET["idmateria"]))
-	echo "<script>alert('Debe especificar un ID de grupo y materia'); location.href='cursos.php'; </script>";
+if(!isset($_GET["idmateria"]))
+	header("Location: cursos.php");
 
-$idcurso = $_GET["idcurso"];
 $idmateria = $_GET["idmateria"];
 $idprofesor = $_SESSION["idprofesor"];
 
-$profemateria = "SELECT * FROM materiasprofesores WHERE idmateria = $idmateria AND idprofesor = $idprofesor";
+$profemateria = "SELECT count(*) FROM materiasprofesores WHERE idmateria = $idmateria AND idprofesor = $idprofesor";
 $profemateria = mysqli_query($link, $profemateria);
 
 if($profemateria){

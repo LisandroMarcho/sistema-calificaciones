@@ -77,7 +77,7 @@ if(isset($_POST["presentes"])) {
 								<label>Ausente</label>
 							</td> 
 							<td>
-								$r[2]
+								".strtoupper($r[3]).", $r[2]
 								<input type='hidden' value=$r[0] name=alumnos[]>
 							</td>
 							<td>
