@@ -33,7 +33,7 @@ $idmaterias = mysqli_query($link, $idmaterias);
 			$escuela = mysqli_query($link, $escuela);
 			$escuela = mysqli_fetch_array($escuela);
 
-			echo "<li><a href='vercurso.php?idcurso=$curso[0]&idmateria=$materia[0]'>$materia[2] - $curso[2]° $curso[3]ª $curso[4]</a> - $escuela[1]</li>";
+			echo "<li><a href='vercurso.php?idmateria=$materia[0]'>$materia[2] - $curso[2]° $curso[3]ª $curso[4]</a> - $escuela[1]</li>";
 		}
 	?>
 	</ul>

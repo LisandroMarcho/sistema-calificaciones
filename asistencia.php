@@ -4,23 +4,6 @@ include_once("conx.php");
 
 verifySession();
 
-$fechahoy = date("Y-m-d");
-
-$idmateria = $_GET["materia"];
-$idhorario = $_GET["horario"];
-
-$materia = "SELECT * FROM materias WHERE idmateria = $idmateria";
-$materia = mysqli_fetch_array(mysqli_query($link, $materia));
-
-$horarios = "SELECT * FROM horarios WHERE idmateria = $idmateria";
-$horarios = mysqli_query($link, $horarios);
-
-$alumnos = "SELECT * FROM alumnos WHERE idcurso = $materia[1]";
-$alumnos = mysqli_query($link, $alumnos);
-
-$query = "SELECT * FROM asistencias WHERE idmateria = $idmateria AND idhorario = $idhorario AND fecha = '$fechahoy'";
-$query = mysqli_query($link, $query);
-
 if(isset($_POST["presentes"])) {
 	$fecha = $_POST["fecha"];
 	$idmateria = $_POST["materia"];
@@ -29,11 +12,51 @@ if(isset($_POST["presentes"])) {
 	foreach ($_POST["presentes"] as $key => $estado) {
 		$idalumno = $_POST["alumnos"][$key];
 		$observacion = $_POST["observaciones"][$key];
-		$query = "INSERT INTO asistencias (idalumno, idmateria, idhorario, fecha, estado, observaciones) VALUES ($idalumno, $idmateria, $idhorario,'$fecha', '$estado', '$observacion')";	
-		$consulta = mysqli_query($link, $query);
+		$carga = "INSERT INTO asistencias (idalumno, idmateria, idhorario, fecha, estado, observaciones) VALUES ($idalumno, $idmateria, $idhorario,'$fecha', '$estado', '$observacion')";	
+		$consulta = mysqli_query($link, $carga);
 		//if($consulta) echo "<script>console.log(`$query`);</script>";
 	}
 }
+
+if(isset($_POST["cambiar"])){
+	$fecha = $_POST["fecha"];
+	$idmateria = $_POST["materia"];
+	$idhorario = $_POST["horario"];
+	
+	foreach ($_POST["cambiar"] as $key => $estado) {
+		$idasistencia = $_POST["asistencias"][$key];
+		$idalumno = $_POST["alumnos"][$key];
+		$observacion = $_POST["observaciones"][$key];
+		$cambio = "UPDATE asistencias SET estado = '$estado', observaciones = '$observacion' WHERE idasistencia = $idasistencia";	
+		$consulta = mysqli_query($link, $cambio);
+		//if($consulta) echo "<script>console.log(`$query`);</script>";
+	}
+}
+
+if(isset($_GET["fecha"]))
+	$fechahoy = $_GET["fecha"];
+else $fechahoy = date("Y-m-d");
+
+if(isset($_GET["materia"]))
+	$idmateria = $_GET["materia"];
+else header('Location: cursos.php');
+
+$materia = "SELECT * FROM materias WHERE idmateria = $idmateria";
+$materia = mysqli_fetch_array(mysqli_query($link, $materia));
+
+$horarios = "SELECT * FROM horarios WHERE idmateria = $idmateria";
+$horarios = mysqli_query($link, $horarios);
+
+if(isset($_GET["horario"]))
+	$idhorario = $_GET["horario"];
+else $idhorario = mysqli_fetch_array(mysqli_query($link, "SELECT idhorario FROM horarios WHERE idmateria = $idmateria LIMIT 1"))[0];
+
+$alumnos = "SELECT * FROM alumnos WHERE idcurso = $materia[1]";
+$alumnos = mysqli_query($link, $alumnos);
+
+
+$query = "SELECT * FROM asistencias WHERE idmateria = $idmateria AND idhorario = $idhorario AND fecha = '$fechahoy'";
+$query = mysqli_query($link, $query);
 
 ?>
 
@@ -52,16 +75,21 @@ if(isset($_POST["presentes"])) {
 </head>
 <body>
 	<h2><?php echo $materia["nom"];	 ?></h2>
-	<form method="POST">
-		<input type="hidden" name="materia" value=<?php echo $_GET["materia"]; ?>>
+	<form method="GET">
+		<input type="hidden" name="materia" value=<?php echo $idmateria; ?>>
 		<input type="date" name="fecha" style="margin-left: 10px;"
-		value="<?php echo $fechahoy; ?>">
-		<select name="horario" value=<?php echo $_GET["horario"] ?>>
+		value="<?php echo $fechahoy; ?>" onchange="this.form.submit()">
+		<select name="horario" value="<?php echo $idhorario; ?>" onchange="this.form.submit();">
 			<?php
 				while($r = mysqli_fetch_array($horarios)) 
 					echo "<option value=$r[0]>$r[2] - $r[3]</option>";
 			?>
 		</select>
+	</form>
+	<form method="POST">
+		<input type="hidden" name="materia" value=<?php echo $idmateria; ?>>
+		<input type="hidden" name="fecha" value="<?php echo $fechahoy; ?>">
+		<input type="hidden" name="horario" value=<?php echo $idhorario; ?>>
 		<table border="1" style="margin-top: 10px;">
 			<tr>
 				<th>Presente</th>
@@ -70,9 +98,29 @@ if(isset($_POST["presentes"])) {
 			</tr>
 			<?php
 
-				while($r = mysqli_fetch_array($alumnos))
+				if(mysqli_num_rows($query) > 0){
+					while($r = mysqli_fetch_array($query)){
+						$alumno = "SELECT * FROM alumnos WHERE idalumno = $r[1]";
+						$alumno = mysqli_fetch_array(mysqli_query($link, $alumno));
+						echo "<tr>
+							<td style='background: red' onclick='cambiarEstado(this);'>
+								<input type=hidden name=cambiar[] value='$r[5]'>
+								<label>Ausente</label>
+							</td> 
+							<td>
+								".strtoupper($alumno[3]).", $alumno[2]
+								<input type='hidden' value=$alumno[0] name=alumnos[]>
+								<input type='hidden' value=$r[0] name=asistencias[]>
+							</td>
+							<td>
+								<input type='text' placeholder='Observaciones...' name='observaciones[]' value=' '>
+							</td> 
+						  </tr>";
+					}
+				}
+				else while($r = mysqli_fetch_array($alumnos))
 					echo "<tr>
-							<td style='background: red' onclick='cambiarPresente(this);'>
+							<td style='background: red' onclick='cambiarEstado(this);'>
 								<input type=hidden name=presentes[] value='a'>
 								<label>Ausente</label>
 							</td> 
@@ -86,14 +134,14 @@ if(isset($_POST["presentes"])) {
 						  </tr>";
 			?>
 		</table>
-		<input type="submit" value="Cargar asistencia">
+		<input type="submit" value="Guardar asistencia">
 	</form>
 
 	<script>
-		//window.onload = comprobarPresentes();
+		window.onload = pintarEstados();
 
-		function comprobarPresentes(){
-			let inputs = document.querySelectorAll('input[name="presentes[]"]');
+		function pintarEstados(){
+			let inputs = document.querySelectorAll('input[name="cambiar[]"]');
 			inputs.forEach(input => {
 				if (input.value == "p") {
 					input.parentElement.style.background = "green";
@@ -105,7 +153,7 @@ if(isset($_POST["presentes"])) {
 			})
 		}
 
-		function cambiarPresente(td){
+		function cambiarEstado(td){
 			let input = td.children[0];
 			let label = td.children[1];
 
