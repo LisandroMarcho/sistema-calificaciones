@@ -14,6 +14,4 @@ function verifySession(){
 	if(!isset($_SESSION["idprofesor"])) header('Location: index.php');
 }
 
-
-
 ?>

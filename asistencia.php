@@ -14,7 +14,6 @@ if(isset($_POST["presentes"])) {
 		$observacion = $_POST["observaciones"][$key];
 		$carga = "INSERT INTO asistencias (idalumno, idmateria, idhorario, fecha, estado, observaciones) VALUES ($idalumno, $idmateria, $idhorario,'$fecha', '$estado', '$observacion')";	
 		$consulta = mysqli_query($link, $carga);
-		//if($consulta) echo "<script>console.log(`$query`);</script>";
 	}
 }
 
@@ -51,7 +50,7 @@ if(isset($_GET["horario"]))
 	$idhorario = $_GET["horario"];
 else $idhorario = mysqli_fetch_array(mysqli_query($link, "SELECT idhorario FROM horarios WHERE idmateria = $idmateria LIMIT 1"))[0];
 
-$alumnos = "SELECT * FROM alumnos WHERE idcurso = $materia[1]";
+$alumnos = "SELECT * FROM alumnos WHERE idcurso = $materia[1] ORDER BY ape ASC";
 $alumnos = mysqli_query($link, $alumnos);
 
 
@@ -74,18 +73,20 @@ $query = mysqli_query($link, $query);
 	</style>
 </head>
 <body>
-	<h2><?php echo $materia["nom"];	 ?></h2>
+	<h2 style="display: inline-block; margin-right: 10px;"><?php echo $materia["nom"];	 ?></h2>
+	<a href="./vercurso.php?idmateria=<?php echo $materia[0]; ?>">Volver...</a>
 	<form method="GET">
 		<input type="hidden" name="materia" value=<?php echo $idmateria; ?>>
 		<input type="date" name="fecha" style="margin-left: 10px;"
 		value="<?php echo $fechahoy; ?>" onchange="this.form.submit()">
-		<select name="horario" value="<?php echo $idhorario; ?>" onchange="this.form.submit();">
+		<select name="horario" onchange="this.form.submit();">
 			<?php
-				while($r = mysqli_fetch_array($horarios)) 
-					echo "<option value=$r[0]>$r[2] - $r[3]</option>";
+				while($r = mysqli_fetch_array($horarios))
+					echo "<option value='$r[0]'". ($idhorario == $r[0] ? " selected" : "" ) .">$r[2] - $r[3]</option>";
 			?>
 		</select>
 	</form>
+	<button onclick="sinClases();" style="margin-top: 10px">Sin clases</button>
 	<form method="POST">
 		<input type="hidden" name="materia" value=<?php echo $idmateria; ?>>
 		<input type="hidden" name="fecha" value="<?php echo $fechahoy; ?>">
@@ -113,7 +114,7 @@ $query = mysqli_query($link, $query);
 								<input type='hidden' value=$r[0] name=asistencias[]>
 							</td>
 							<td>
-								<input type='text' placeholder='Observaciones...' name='observaciones[]' value=' '>
+								<input type='text' placeholder='Observaciones...' name='observaciones[]' value='$r[6]'>
 							</td> 
 						  </tr>";
 					}
@@ -134,11 +135,22 @@ $query = mysqli_query($link, $query);
 						  </tr>";
 			?>
 		</table>
-		<input type="submit" value="Guardar asistencia">
+		<input type="submit" value="Guardar asistencia" style="margin-top: 10px">
 	</form>
 
 	<script>
 		window.onload = pintarEstados();
+
+		function sinClases(){
+			let inputs = document.querySelectorAll('input[name="presentes[]"]');
+			if(inputs.length < 1) 
+				inputs = document.querySelectorAll('input[name="cambiar[]"]');
+			inputs.forEach(input => {
+				input.value = "s";
+				input.parentElement.style.background = "grey";
+				input.nextElementSibling.innerText = "Sin clases";
+			});
+		}
 
 		function pintarEstados(){
 			let inputs = document.querySelectorAll('input[name="cambiar[]"]');
@@ -149,8 +161,11 @@ $query = mysqli_query($link, $query);
 				} else if(input.value == "t"){
 					input.parentElement.style.background = "blue";
 					input.nextElementSibling.innerText = "Tarde";
+				} else if(input.value == "s"){
+					input.parentElement.style.background = "grey";
+					input.nextElementSibling.innerText = "Sin Clases";
 				}
-			})
+			});
 		}
 
 		function cambiarEstado(td){

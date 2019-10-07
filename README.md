@@ -8,10 +8,13 @@
 	- _Verificar si está tomada la asistencia **LISTO**_
 	- _Tomar asistencia **LISTO**_
 	- _Mostrar la asistencia **LISTO**_
-	- Marcar 'Sin clases'
+	- _Marcar 'Sin clases' **LISTO**_
 - Calificaciones
-	- Ver calificiones
-	- Cargar calificaciones
+	- _Ver calificiones **LISTO**_
+	- _Cargar calificaciones **LISTO**_
+- Mesas
+	- Mostrar mesas
+	- Cargar mesas
 
 ## Diseño
 - Armar página de Login
