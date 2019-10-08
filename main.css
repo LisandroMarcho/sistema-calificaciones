@@ -80,7 +80,8 @@ section {
 }
 
 .cursos, .vercurso {
-    margin: 70px 5px 0 10px;
+    width: 95%;
+    margin: 20px auto;
 }
 
 /* Cursos */
@@ -90,12 +91,30 @@ section {
     cursor: pointer;
 }
 
-.cursos h3 {
+.curso h3 { color: white; }
+
+.cursos table {
+    width: 100%;
     margin-bottom: 20px;
 }
 
-.cursos ul {
-    margin-left: 60px;
+
+.cursos table td {
+    padding: 30px;
+    border-bottom: solid grey 1px;
+    border-left: solid grey 1px;
+    border-right: solid grey 1px;
+}
+
+.cursos-nombre-escuela {
+    text-align: left;
+    background-color: blue;
+    color: white;
+    font-size: 1.17em;
+} 
+
+.cursos-nombre-escuela th {
+    padding: 30px;
 }
 
 .cursos li {
@@ -104,7 +123,7 @@ section {
 
 /* Ver curso */
 
-.vercurso ul { margin-left: 40px; }
+.vercurso tr { text-align: left; }
 
 .curso-acciones {
     list-style: none;
@@ -153,21 +172,44 @@ section {
     h3 {font-size: 1.17em;}
 
     .cursos, .vercurso {
-        margin: 20px 5px 0 10px;
+        width: 70%;
+        margin: 40px auto;
     }
     
     /* Cursos */
 
     .cursos h3 {
-        margin-bottom: 10px;
+        margin-bottom: 20px;
     }
     
-    .cursos ul {
-        margin-left: 30px;
+    .cursos table {
+        margin-top: 10px;
+    }
+
+    .cursos table {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .cursos table td {
+        padding: 10px;
+        border-bottom: solid grey 1px;
+        border-left: solid grey 1px;
+        border-right: solid grey 1px;
+    }
+
+    .cursos-nombre-escuela {
+        text-align: left;
+        background-color: blue;
+        color: white;
+        font-size: 1.17em;
+    } 
+
+    .cursos-nombre-escuela th {
+        padding: 10px;
     }
 
     /* Ver curso*/
-    .vercurso ul {}
 
     .curso-acciones {
         list-style: none;
@@ -178,7 +220,7 @@ section {
         margin: 0 5px;
     }
     
-    .curso-acciones > li > a {
+    .curso-acciones a {
         font-size: 20px;
     }
 }

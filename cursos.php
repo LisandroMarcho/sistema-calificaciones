@@ -31,8 +31,8 @@ $escuelas = mysqli_query($link, $escuelas);
 		<h2>Cursos</h2>
 		<?php
 			while($r = mysqli_fetch_array($escuelas)){
-				echo "<br><h3>$r[1]</h3>";
-				echo "<ul>";
+				echo "<table>";
+				echo "<tr class='cursos-nombre-escuela'><th>$r[1]</th></tr>";
 				
 				$materias = "SELECT m.* FROM materias m, cursos c 
 							WHERE m.idcurso = c.idcurso AND c.idescuela = $r[0]";
@@ -41,9 +41,9 @@ $escuelas = mysqli_query($link, $escuelas);
 					$curso = "SELECT * FROM cursos WHERE idcurso = $materia[1]";
 					$curso = mysqli_query($link, $curso);
 					$curso = mysqli_fetch_array($curso);
-					echo "<li><a href='vercurso.php?idmateria=$materia[0]'>$curso[2]° $curso[3]ª $curso[4] - $materia[2]</a></li>";
+					echo "<tr><td><a href='vercurso.php?idmateria=$materia[0]'>$curso[2]° $curso[3]ª $curso[4] - $materia[2]</a></td></tr>";
 				}
-				echo "</ul>";
+				echo "</table>";
 			}
 		?>
 	</div>
