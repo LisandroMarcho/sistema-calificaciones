@@ -27,14 +27,18 @@ else if(isset($_POST["email"]) && isset($_POST["pass"])){
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
+	<link rel="stylesheet" href="main.css">
 	<title>Login</title>
 </head>
-<body>
-	<h2>Login</h2>
-	<form method="POST">
-		<input type="email" name="email"><br>
-		<input type="password" name="pass" ><br>
-		<input type="submit" value="Login"><br>
-	</form>
+<body class="login">
+	<div class="login-div">
+		<h2>Iniciar sesión</h2>
+		<h3>¡Bienvenido, profesores!</h3>
+		<form method="POST">
+			<input type="email" class="login-text" name="email" placeholder="Correo Electrónico" required><br>
+			<input type="password" class="login-text" name="pass" placeholder="Contraseña" required><br>
+			<input type="submit" class="login-submit"  value="Entrar"><br>
+		</form>
+	</div>
 </body>
 </html>
