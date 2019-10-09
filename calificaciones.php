@@ -63,6 +63,7 @@ $query = mysqli_query($link, $query);
 <head>
 	<meta charset="UTF-8">
 	<title>Cargar calificaciones</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
 	<style>
 		.nom {
 			width: 200px;
@@ -118,7 +119,8 @@ $query = mysqli_query($link, $query);
 			}
 			else while ($alumno = mysqli_fetch_array($alumnos)) {
 				$indiceAsistencia = $periodo - 1;
-				$asistencia = "SELECT * FROM asistencias WHERE idalumno = $alumno[0] AND fecha BETWEEN $fechasPeriodo[$indiceAsistencia] AND estado != 's'";
+				$asistencia = "SELECT * FROM asistencias WHERE idalumno = $alumno[0] AND idmateria = $materia[0] AND estado != 's' AND fecha BETWEEN " . $fechasPeriodo[$indiceAsistencia];
+				echo "<script>console.log(`$asistencia`)</script>";
 				$asistencia = mysqli_query($link, $asistencia);
 
 				$presente = 0;
@@ -127,7 +129,7 @@ $query = mysqli_query($link, $query);
 					if($r[5] == 'p') $presente++;
 					else if($r[5]=='t') $presente += 0.5;
 				}
-				if($numAsistencias > 1)
+				if($numAsistencias > 0)
 					$promedioAsistencia = number_format(($presente / $numAsistencias)*100, 2);
 				else $promedioAsistencia = 0;
 
