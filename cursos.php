@@ -8,7 +8,7 @@ $idprofesor = $_SESSION["idprofesor"];
 
 $escuelas = "SELECT e.* 
 FROM escuelas e, profesores p, materiasprofesores mp, materias m, cursos c
-WHERE p.idprofesor = 1
+WHERE p.idprofesor = $idprofesor
 AND p.idprofesor = mp.idprofesor
 AND mp.idmateria = m.idmateria
 AND c.idcurso = m.idcurso
@@ -22,10 +22,11 @@ $escuelas = mysqli_query($link, $escuelas);
 <head>
 	<meta charset="UTF-8">
 	<title>Cursos</title>
+	<link rel="preload" href="main.js" as="script">
 	<link rel="stylesheet" href="main.css">
 </head>
 <body>
-	<nav></nav>
+	<nav><a class="button" href="./logout.php">Cerrar sesión</a></nav>
 	
 	<div class="cursos">
 		<h2>Cursos</h2>
@@ -47,5 +48,7 @@ $escuelas = mysqli_query($link, $escuelas);
 			}
 		?>
 	</div>
+
+	<script src="main.js"></script>
 </body>
 </html>

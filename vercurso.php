@@ -6,8 +6,12 @@ verifySession();
 
 if (!isset($_GET["idmateria"]))
 	header("Location: cursos.php");
+else $idmateria = $_GET["idmateria"];
 
-$idmateria = $_GET["idmateria"];
+$sesionValida = "SELECT count(*) FROM materiasprofesores WHERE idmateria = $idmateria AND idprofesor = " . $_SESSION["idprofesor"];
+$sesionValida = mysqli_query($link, $sesionValida);
+if(mysqli_fetch_array($sesionValida)[0] == 0) header('Location: cursos.php');
+
 $idprofesor = $_SESSION["idprofesor"];
 
 $profemateria = "SELECT count(*) FROM materiasprofesores WHERE idmateria = $idmateria AND idprofesor = $idprofesor";
@@ -47,18 +51,18 @@ if ($profemateria) {
 <body>
 	<nav></nav>
 	<div class="vercurso">
-		<a href="./cursos.php">Vovler...</a>
+		<a href="./cursos.php">Volver...</a>
 		<h3><?php echo $escuela; ?></h3>
 		<h2><?php echo $materia[2]; ?></h2>
 		<h3><?php echo "$curso[2]° $curso[3]ª $curso[4]"; ?></h3>
 		<br>
 		<table>
-			<tr class="curso-acciones">
+			<tr class="acciones">
 				<td>
-					<a href='<?php echo "asistencia.php?materia=$idmateria"; ?>'>Asistencia</a>
+					<a class="button" href='<?php echo "asistencia.php?materia=$idmateria"; ?>'>Asistencia</a>
 				</td>
 				<td>
-					<a href='<?php echo "calificaciones.php?materia=$idmateria"; ?>'>Calificaciones</a>
+					<a class="button" href='<?php echo "calificaciones.php?materia=$idmateria"; ?>'>Calificaciones</a>
 				</td>
 			</tr>
 		</table>
@@ -69,7 +73,7 @@ if ($profemateria) {
 				<th><h3>Alumnos<h3></th>
 			</tr>		
 			<?php while ($r = mysqli_fetch_array($alumnos)) {
-				echo "<tr><td> - " . strtoupper($r[3]) . ", $r[2]</td></tr>";
+				echo "<tr><td> - " . strtoupper($r[3]) . ", $r[2]</td><td></td></tr>";
 			} ?>
 		</table>
 	</div>

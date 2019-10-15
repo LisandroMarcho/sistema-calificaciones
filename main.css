@@ -70,6 +70,12 @@ nav {
     min-height: 60px;
     background: #D4D4D4;
     box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.3);
+    overflow: hidden;
+    transition: 1s;
+}
+
+nav .button {
+    display: none;
 }
 
 h2 { font-size: 80px; }
@@ -79,15 +85,30 @@ section {
     display: flex;
 }
 
-.cursos, .vercurso {
+.no-sec {
+    user-select: none;
+}
+
+.cursos, .vercurso, .formulario {
     width: 95%;
     margin: 20px auto;
+}
+
+.button {
+    background: #75A7E0;
+    border: none;
+    padding: 20px;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 /* Cursos */
 
 .cursos a {
     text-decoration: none;
+    color: black;
     cursor: pointer;
 }
 
@@ -108,7 +129,7 @@ section {
 
 .cursos-nombre-escuela {
     text-align: left;
-    background-color: blue;
+    background-color: #75A7E0;
     color: white;
     font-size: 1.17em;
 } 
@@ -125,19 +146,34 @@ section {
 
 .vercurso tr { text-align: left; }
 
-.curso-acciones {
-    list-style: none;
-    width: 100%;
-    align-items: center;
+.vercurso .acciones td{
+    padding: 0 15px;
 }
 
-.curso-acciones li {
-    float: left;
-    margin: 0 5px;
+.vercurso .acciones a {
+    font-size: 70px;
 }
 
-.curso-acciones > li > a {
-    font-size: 50px;
+/* Forms */
+
+.formulario input, .formulario button, .formulario select {
+    margin: 20px 0;
+    border: solid 1px black;
+}
+
+.svg {
+    width: 140px;
+}
+
+.comment {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: white;
+    padding: 100px 50px;
+    display: none;
+    border: solid 5px black;
 }
 
 @media only screen and (min-width: 1000px) {
@@ -168,12 +204,34 @@ section {
         margin: 50px 0 0 5px; 
     }
 
+    /*** Resto de la página ***/
+
+    
+    nav .button {
+        display: block;
+        position: absolute;
+        float: right;
+        top: 10px;
+        right: 10px;
+    }
+
+
     h2 {font-size: 1.5em;}
     h3 {font-size: 1.17em;}
 
-    .cursos, .vercurso {
+    .cursos, .vercurso, .formulario {
         width: 70%;
         margin: 40px auto;
+    }
+
+    .button {
+        background: #75A7E0;
+        border: none;
+        padding: 10px;
+        text-decoration: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
     }
     
     /* Cursos */
@@ -199,9 +257,6 @@ section {
     }
 
     .cursos-nombre-escuela {
-        text-align: left;
-        background-color: blue;
-        color: white;
         font-size: 1.17em;
     } 
 
@@ -211,17 +266,36 @@ section {
 
     /* Ver curso*/
 
-    .curso-acciones {
-        list-style: none;
-        width: 100%;
+    .vercurso tr { text-align: left; }
+
+    .vercurso .acciones td{
+        padding: 0 5px;
+    }
+
+    .vercurso .acciones a {
+        font-size: 24px;
+    }
+
+    /* Formularios */
+
+    .formulario input, .formulario button, .formulario select {
+        margin: 20px 0;
+        border: solid 1px black;
     }
     
-    .curso-acciones li {
-        margin: 0 5px;
+    .svg {
+        width: 70px;
     }
     
-    .curso-acciones a {
-        font-size: 20px;
+    .comment {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        background: white;
+        padding: 100px 50px;
+        display: none;
+        border: solid 5px black;
     }
 }
 
